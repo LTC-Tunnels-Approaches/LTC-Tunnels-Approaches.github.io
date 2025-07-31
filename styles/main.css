@@ -1,6 +1,6 @@
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background: #f5f6fa;
+    background: #fff;
     margin: 0;
     padding: 0;
     text-align: center;
@@ -33,12 +33,11 @@ h1 {
     transition: box-shadow 0.2s, transform 0.2s;
     font-size: 1.1rem;
     font-weight: 500;
-    /* Ensure text and icons are white by default */
     color: #fff;
 }
 
 .tile a {
-    color: inherit; /* Inherit color from parent */
+    color: inherit;
     text-decoration: none;
     width: 100%;
     height: 100%;
@@ -50,30 +49,18 @@ h1 {
 }
 
 .tile i {
-    font-size: 2.5rem;
-    margin-bottom: 8px;
+    font-size: 2.2rem;
+    margin-bottom: 4px; /* Reduced spacing */
     display: block;
-    /* Center icon horizontally */
     align-self: center;
 }
 
 .tile span {
     display: block;
-    margin-top: 8px;
+    margin-top: 4px; /* Reduced spacing */
     font-size: 1rem;
     font-weight: 500;
     text-align: center;
-}
-
-.tile .check {
-    position: absolute;
-    bottom: 8px;
-    right: 12px;
-    font-size: 1rem;
-    color: #fff;
-    background: #2ecc40;
-    border-radius: 50%;
-    padding: 2px;
 }
 
 .blue { background: #3498db; }
