@@ -63,13 +63,13 @@ h1 {
     text-align: center;
 }
 
-.blue { background: #3498db; }
-.light-blue { background: #5dade2; }
-.green { background: #229954; }
-.orange { background: #f39c12; }
+.blue { background: #002E5F; }
+.light-blue { background: #058CCB; }
+.green { background: #135D3F; }
+.orange { background: #E85E2C; }
 
 .tile:hover {
     box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-    transform: translateY(-4px) scale(1.04);
+    transform: translateY(-2px) scale(1.04);
     opacity: 0.9;
 }
