@@ -18,7 +18,7 @@ h1 {
     gap: 10px; /* <-- Change this value to adjust spacing */
     justify-content: center;
     margin: 40px;
-    max-width: 800px;
+    max-width: 650px;
 }
 
 .tile {
@@ -82,7 +82,7 @@ h1 {
     margin: 15px auto 0 auto;
     font-size: 1rem;
     color: #333;
-    max-width: 800px;    /* Match tile-container */
+    max-width: 650px;    /* Match tile-container */
     width: 100%;         /* Responsive */
 }
 
