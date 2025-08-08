@@ -82,6 +82,8 @@ h1 {
     margin: 15px auto 0 auto;
     font-size: 1rem;
     color: #333;
+    max-width: 800px;    /* Match tile-container */
+    width: 100%;         /* Responsive */
 }
 
 .legend-item {
