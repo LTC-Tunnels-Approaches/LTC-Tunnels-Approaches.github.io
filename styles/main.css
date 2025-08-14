@@ -14,7 +14,7 @@ h1 {
 
 .tile-container {
     display: grid;
-    grid-template-columns: repeat(1fr, 2);
+    grid-template-columns: repeat(5, 1fr);
     gap: 10px; /* <-- Change this value to adjust spacing */
     justify-content: center;
     margin: 40px;
