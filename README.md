@@ -1,6 +1,6 @@
 # MORTA Home Tiles App
 
-A simple, responsive tile-based interface for accessing MORTA documents and tools. Built with HTML, CSS, and JavaScript.
+A simple, responsive tile-based interface for accessing MORTA documents and tools. Built with HTML, CSS, and JavaScript...
 
 ## Structure
 
