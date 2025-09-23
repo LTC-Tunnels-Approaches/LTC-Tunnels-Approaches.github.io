@@ -27,7 +27,7 @@ h1 {
     grid-template-rows: repeat(2, auto); /* Ensures 2 rows */
 /*    grid-template-columns: repeat(5, 1fr); /* Base case: 5 columns */
 /*    gap: 10px;
-    justify-items: eecenter;
+    justify-items: center;
     margin: 40px;
 }*/
 
@@ -37,85 +37,41 @@ h1 {
     width: 140px;
     height: 140px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    transition: all 0.3s ease;
+    transition: box-shadow 0.2s, transform 0.2s;
     font-size: 1.1rem;
     font-weight: 400;
     color: #fff;
-    padding: 10px;
+    padding: 10px; /* Add this line for more inner spacing */
+}
+
+.tile a {
+    color: inherit;
+    text-decoration: none;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: relative;
 }
 
 .tile i {
-    font-size: 2rem;
-    margin-bottom: 10px;
+    font-size: 2.2rem;
+    margin-bottom: 4px; /* Reduced spacing */
+    display: block;
+    align-self: center;
 }
 
 .tile span {
-    font-size: 0.9rem;
-}
-
-.tile.expanded {
-    width: 100%;
-    grid-column: 1 / -1;
-    padding: 20px;
-    z-index: 10;
-    /* Keep same height */
-    height: 140px;
-}
-
-.sub-content {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background: #fff;
-    border-radius: 8px;
-    margin-top: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.expanded .sub-content {
     display: block;
-}
-
-.sub-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 15px;
-}
-
-.sub-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 15px;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    color: inherit;
-    background: #f5f5f5;
-}
-
-.sub-item i {
-    font-size: 1.5rem;
-    margin-bottom: 8px;
-    color: #333;
-}
-
-.sub-item span {
-    font-size: 0.9rem;
-    color: #333;
+    margin-top: 4px; /* Reduced spacing */
+    font-size: 1rem;
+    font-weight: 400;
     text-align: center;
-}
-
-.sub-item:hover {
-    background: #eeeeee;
-    transform: translateY(-2px);
 }
 
 .blue { background: #002E5F; }
@@ -156,17 +112,4 @@ h1 {
     align-items: center;
     max-width: 650px;
     margin: 0 auto;
-}
-
-.close-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: none;
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.8);
-}
-
-.expanded .close-button {
-    display: block;
 }

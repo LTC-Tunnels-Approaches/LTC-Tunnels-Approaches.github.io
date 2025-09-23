@@ -11,32 +11,3 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .forEach(tile => container.appendChild(tile));
 });
-
-document.querySelectorAll('.tile').forEach(tile => {
-    const mainLink = tile.querySelector('.tile-main');
-    const closeButton = tile.querySelector('.close-button');
-
-    mainLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Close other expanded tiles
-        document.querySelectorAll('.tile.expanded').forEach(expandedTile => {
-            if (expandedTile !== tile) {
-                expandedTile.classList.remove('expanded');
-            }
-        });
-        tile.classList.toggle('expanded');
-    });
-
-    closeButton.addEventListener('click', () => {
-        tile.classList.remove('expanded');
-    });
-});
-
-// Close expanded tiles when clicking outside
-document.addEventListener('click', (e) => {
-    if (!e.target.closest('.tile')) {
-        document.querySelectorAll('.tile.expanded').forEach(tile => {
-            tile.classList.remove('expanded');
-        });
-    }
-});
