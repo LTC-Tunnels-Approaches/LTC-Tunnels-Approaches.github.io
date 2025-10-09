@@ -2,82 +2,121 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>MORTA Home Tiles</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MORTA Home Tiles App</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles/main.css">
-    <!-- Font Awesome Kit -->
-    <script src="https://kit.fontawesome.com/056f063c21.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="main-content">
-        <div class="tile-container">
-            <div class="tile light-blue" data-order="1">
-                <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/00bc1ac1-b4a3-4ada-a4ee-1cd93c8d6e9c" target="_blank">
-                    <i class="fa-regular fa-calendar-check"></i>
-                    <span>Master Information Delivery Plan</span>
-                </a>
-            </div>
-            <div class="tile orange" data-order="9">
-                <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/fd77907f-eeb8-4ef2-bd63-04b710630589" target="_blank">
-                    <i class="fa-solid fa-seedling"></i>
-                    <span>Carbon Management</span>
-                </a>
-            </div>
-            <div class="tile blue" data-order="2">
-                <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/7322d21d-4504-4ee9-991f-df06dae35a8b" target="_blank">
-                    <i class="fa-solid fa-landmark"></i>
-                    <span>Consents Register</span>
-                </a>
-            </div>
-            <div class="tile blue" data-order="3">
-                <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/6acf8fde-8782-45f9-85d2-b9978f3ff5b9" target="_blank">
-                    <i class="fa-solid fa-helmet-safety"></i>
-                    <span>Temporary Works Register</span>
-                </a>
-            </div>
-            <div class="tile orange" data-order="8">
-                <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/19242ecc-a357-4116-8863-5933532f61d5" target="_Blank">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <span>Procurement Management</span>
-                </a>
-            </div>
-            <div class="tile blue" data-order="4">
-                <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/a9e20b58-7f06-4363-bf8c-57996566b033" target="_blank">
-                    <i class="fa-solid fa-cube"></i>
-                    <span>Digital Engineering Management</span>
-                </a>
-            </div>
-            <div class="tile blue" data-order="5">
-                <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/0408eea1-710f-4e80-90c3-8d6fca0189d5" target="_blank">
-                    <i class="fa-regular fa-calendar-check"></i>
-                    <span>Programme Management</span>
-                </a>
-            </div>
-            <div class="tile orange" data-order="10">
-                <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/b2aa7c13-07e2-42e2-b51b-a5d02d14dd1e" target="_blank">
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    <span>Land Access</span>
-                </a>
-            </div>
-            <div class="tile light-blue" data-order="6">
-                <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/9e4e04d7-1328-4a83-9b32-0a954a4ee9f2" target="_blank">
-                    <i class="fa-solid fa-car-tunnel"></i>
-                    <span>Information Standards</span>
-                </a>
-            </div>
-            <div class="tile light-blue" data-order="7">
-                <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/88f05063-6233-42fa-a939-0fe11f5069f5" target="_blank">
-                    <i class="fa-solid fa-chart-area"></i>
-                    <span>Monthly Progress Report</span>
-                </a>
-            </div>
+<div class="main-content">
+    <button class='back-button' style='display:none;'>⬅️ Back</button>
+    <div class="tile-container">
+
+        <div class="tile light-blue" data-id="1" data-has-sub="false">
+            <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/00bc1ac1-b4a3-4ada-a4ee-1cd93c8d6e9c" target="_blank" >
+                <i class="fa-regular fa-calendar-check"></i>
+                <span>Master Information Delivery Plan</span>
+            </a>
         </div>
-        <div class="legend">
-            <span class="legend-item light-blue"></span> 🔓 Public&nbsp;&nbsp;
-            <span class="legend-item blue"></span> 🔒 Private&nbsp;&nbsp;
-            <span class="legend-item orange"></span> ⚒️ Work in Progress&nbsp;&nbsp;
+    
+        <div class="tile blue" data-id="3" data-has-sub="false">
+            <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/7322d21d-4504-4ee9-991f-df06dae35a8b" target="_blank" >
+                <i class="fa-solid fa-landmark"></i>
+                <span>Consents Register</span>
+            </a>
         </div>
-    </div>
-    <script src="scripts/app.js"></script>
+    
+        <div class="tile blue" data-id="4" data-has-sub="false">
+            <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/6acf8fde-8782-45f9-85d2-b9978f3ff5b9" target="_blank" >
+                <i class="fa-solid fa-helmet-safety"></i>
+                <span>Temporary Works Register</span>
+            </a>
+        </div>
+    
+        <div class="tile blue" data-id="6" data-has-sub="true">
+            <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/a9e20b58-7f06-4363-bf8c-57996566b033" target="_blank" onclick="return false;">
+                <i class="fa-solid fa-cube"></i>
+                <span>Digital Engineering Management</span>
+            </a>
+        </div>
+    
+        <div class="tile blue" data-id="7" data-has-sub="false">
+            <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/0408eea1-710f-4e80-90c3-8d6fca0189d5" target="_blank" >
+                <i class="fa-regular fa-calendar-check"></i>
+                <span>Programme Management</span>
+            </a>
+        </div>
+    
+        <div class="tile light-blue" data-id="9" data-has-sub="false">
+            <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/9e4e04d7-1328-4a83-9b32-0a954a4ee9f2" target="_blank" >
+                <i class="fa-solid fa-car-tunnel"></i>
+                <span>Information Standards</span>
+            </a>
+        </div>
+    
+        <div class="tile light-blue" data-id="10" data-has-sub="true">
+            <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/88f05063-6233-42fa-a939-0fe11f5069f5" target="_blank" onclick="return false;">
+                <i class="fa-solid fa-chart-area"></i>
+                <span>Monthly Progress Report</span>
+            </a>
+        </div>
+    
+        <div class="tile orange" data-id="5" data-has-sub="false">
+            <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/19242ecc-a357-4116-8863-5933532f61d5" target="_blank" >
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span>Procurement Management</span>
+            </a>
+        </div>
+    
+        <div class="tile orange" data-id="2" data-has-sub="false">
+            <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/fd77907f-eeb8-4ef2-bd63-04b710630589" target="_blank" >
+                <i class="fa-solid fa-seedling"></i>
+                <span>Carbon Management</span>
+            </a>
+        </div>
+    
+        <div class="tile orange" data-id="8" data-has-sub="false">
+            <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/b2aa7c13-07e2-42e2-b51b-a5d02d14dd1e" target="_blank" >
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>Land Access</span>
+            </a>
+        </div>
+    
+        <div class="tile orange" data-id="11" data-has-sub="false">
+            <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/88f05063-6233-42fa-a939-0fe11f5069f5" target="_blank" >
+                <i class="fa-solid fa-arrows-spin"></i>
+                <span>New Topic</span>
+            </a>
+        </div>
+    </div><div class="sub-tiles-container" data-parent="6" style="display:none;"><div class="sub-tiles">
+                <div class="tile light-blue">
+                    <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/04670203-cff8-4de6-9906-3bb57403b497" target="_blank">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span>Design Information Requirements (LOIN)</span>
+                    </a>
+                </div>
+            
+                <div class="tile orange">
+                    <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/5b508732-22b0-4d4c-ab39-567524fe7584" target="_blank">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                        <span>Supply Chain Information Requirements</span>
+                    </a>
+                </div>
+            </div></div><div class="sub-tiles-container" data-parent="10" style="display:none;"><div class="sub-tiles">
+                <div class="tile blue">
+                    <a href="https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/a9e20b58-7f06-4363-bf8c-57996566b033" target="_blank">
+                        <i class="fa-regular fa-box-open"></i>
+                        <span>Digital Component Catalogue</span>
+                    </a>
+                </div>
+            </div></div>
+<div class="legend">
+    <span class="legend-item light-blue"></span> 🔓 Public&nbsp;&nbsp;
+    <span class="legend-item blue"></span> 🔒 Private&nbsp;&nbsp;
+    <span class="legend-item orange"></span> ⚒️ Work in Progress
+</div>
+</div> <!-- main-content -->
+
+<script src="scripts/app.js"></script>
 </body>
 </html>
