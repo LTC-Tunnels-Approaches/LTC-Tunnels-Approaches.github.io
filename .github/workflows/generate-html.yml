@@ -38,5 +38,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: generated-html-preview
-          path: index.html
-          retention-days: 3
+          path: |
+            index.html
+            styles/
+            scripts/3
