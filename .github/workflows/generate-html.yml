@@ -32,7 +32,7 @@ jobs:
       - name: Run Python script
         env:
           API_TOKEN: ${{ secrets.MORTA_API_KEY }}
-        run: python generate_html.py
+        run: python generate_tiles_html.py
 
       - name: Upload generated HTML artifact
         uses: actions/upload-artifact@v4
