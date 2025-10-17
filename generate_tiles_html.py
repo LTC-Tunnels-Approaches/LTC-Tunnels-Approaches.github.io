@@ -1,12 +1,16 @@
 import requests
 import pandas as pd
 from pathlib import Path
+from dotenv import load_dotenv
 import os
+
+# Load environment variables
+load_dotenv()
 
 API_URL = "https://api.morta.io/v1/table/views/6dbab052-7c8c-4f6b-b4d8-595ec7d2794a/rows?size=1000"
 API_TOKEN = os.getenv("API_TOKEN")
 if not API_TOKEN:
-    raise RuntimeError("API_TOKEN not set in GitHub secrets")
+    raise RuntimeError("API_TOKEN not set in .env")
 
 # === OUTPUT PATHS ===
 script_dir = Path(__file__).parent
@@ -14,7 +18,7 @@ css_folder = script_dir / "styles"
 scripts_folder = script_dir / "scripts"
 output_html_file = script_dir / "index.html"
 
-# Create folders
+# Create folders (if not exist)
 css_folder.mkdir(parents=True, exist_ok=True)
 scripts_folder.mkdir(parents=True, exist_ok=True)
 
@@ -43,9 +47,11 @@ df['id'] = df['id'].astype(str)
 if 'parent_id' in df.columns:
     df['parent_id'] = df['parent_id'].astype(str)
 
+# === SPLIT TILES ===
 main_tiles = df[df['type'] == 'tile'].sort_values('order')
 sub_tiles = df[df['type'] == 'sub-tile'].sort_values(['parent_id', 'order'])
 
+# === ICONS ===
 default_icons = {
     'Master Information Delivery Plan': 'fa-regular fa-calendar-check',
     'Carbon Management': 'fa-solid fa-seedling',
@@ -65,6 +71,7 @@ def get_icon(row):
         return icon
     return default_icons.get(row.get('title'), 'fa-solid fa-square')
 
+# === BUILD HTML ===
 html = """<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -123,5 +130,7 @@ html += """
 </html>
 """
 
+# Write HTML file
 output_html_file.write_text(html, encoding="utf-8")
-print(f"✅ index.html generated at {output_html_file.resolve()}")
+
+print(f"✅ HTML generated at: {output_html_file.resolve()}")

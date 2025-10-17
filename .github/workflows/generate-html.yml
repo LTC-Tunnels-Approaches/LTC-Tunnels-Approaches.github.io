@@ -1,9 +1,17 @@
-name: Generate HTML
+name: 🧪 Test Generate HTML on Feature Branches Only
 
 on:
-  workflow_dispatch: # manual trigger
-  schedule:
-    - cron: '0 8 * * *' # daily at 08:00 UTC
+  push:
+    # Run only on branches **except** main
+    branches-ignore:
+      - main
+
+  pull_request:
+    # Optional: Run on PRs targeting main if you want to test before merging
+    branches:
+      - main
+
+  workflow_dispatch:  # allow manual runs too
 
 jobs:
   build:
@@ -11,26 +19,24 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run Python script
         env:
           API_TOKEN: ${{ secrets.MORTA_API_KEY }}
         run: python generate_html.py
 
-      - name: Commit and push updated HTML
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git commit -m "🔄 Auto-update index.html from Morta API" || echo "No changes to commit"
-          git push
+      - name: Upload generated HTML artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-html-preview
+          path: index.html
+          retention-days: 3
