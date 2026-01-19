@@ -1,0 +1,56 @@
+```yaml
+name: Generate Hub & Deploy Preview
+
+on:
+  push:
+    branches:
+      - feature/automate-hub-generation
+  pull_request:
+    branches:
+      - feature/automate-hub-generation
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Generate hub
+        env:
+          MORTA_API_TOKEN: ${{ secrets.MORTA_API_TOKEN }}
+        run: |
+          python generate_hub_github.py
+      
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "✅ No changes"
+          else
+            git add index.html styles/main.css scripts/app.js
+            git commit -m "🤖 Auto-generate hub [skip ci]"
+            git push
+          fi
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: hub-preview
+          path: |
+            index.html
+            styles/
+            scripts/
+          retention-days: 7
