@@ -1,4 +1,4 @@
-name: Generate Hub & Deploy Preview
+﻿name: Generate Hub & Deploy Preview
 
 on:
   push:
@@ -30,7 +30,9 @@ jobs:
       - name: Generate hub
         env:
           MORTA_API_TOKEN: ${{ secrets.MORTA_API_TOKEN }}
-        run: python generate_hub_github.py
+        run: |
+          echo "DEBUG: Token length = ${#MORTA_API_TOKEN}"
+          python generate_hub_github.py
       
       - name: Upload generated hub artifact
         uses: actions/upload-artifact@v4
