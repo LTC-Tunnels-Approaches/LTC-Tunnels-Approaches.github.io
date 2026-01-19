@@ -40,10 +40,10 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           if [ -z "$(git status --porcelain)" ]; then
-            echo "✅ No changes"
+            echo "No changes"
           else
             git add index.html styles/main.css scripts/app.js
-            git commit -m "🤖 Auto-generate hub [skip ci]"
+            git commit -m "Auto-generate hub"
             git push https://${{ github.token }}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
           fi
       
