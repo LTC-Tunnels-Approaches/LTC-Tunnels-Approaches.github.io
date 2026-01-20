@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LTC Tunnels & Approaches - Information Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+<button class="back-button" id="back-button">
+    <i class="fa-solid fa-arrow-left"></i>
+    Back
+</button>
+
+<div class="page-container">
+    <div id="main-page" class="page active">
+        <h1 class="page-title">LTC Tunnels & Approaches</h1>
+        <p class="page-subtitle">Information Hub</p>
+        <div class="main-groups-grid">
+<button class="main-group-tile" data-group="BMJ">
+    <div class="main-group-icon"><i class="fa-solid fa-helmet-safety"></i></div>
+    <div class="main-group-label">BMJ<br><small style="font-size:12px;opacity:0.9;font-weight:400;">Joint Venture</small></div>
+</button>
+<button class="main-group-tile" data-group="AMJ">
+    <div class="main-group-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+    <div class="main-group-label">AMJ<br><small style="font-size:12px;opacity:0.9;font-weight:400;">Designers</small></div>
+</button>
+<button class="main-group-tile" data-group="LTC">
+    <div class="main-group-icon"><i class="fa-solid fa-road-bridge"></i></div>
+    <div class="main-group-label">LTC<br><small style="font-size:12px;opacity:0.9;font-weight:400;">Project</small></div>
+</button>
+<button class="main-group-tile" data-group="Third Party">
+    <div class="main-group-icon"><i class="fa-solid fa-handshake"></i></div>
+    <div class="main-group-label">Third Party<br><small style="font-size:12px;opacity:0.9;font-weight:400;">Supply Chain</small></div>
+</button>
+<button class="main-group-tile" data-group="Help Centre">
+    <div class="main-group-icon"><i class="fa-solid fa-circle-info"></i></div>
+    <div class="main-group-label">Help Centre<br><small style="font-size:12px;opacity:0.9;font-weight:400;">Support</small></div>
+</button>
+        </div>
+    </div>
+
+    <div id="tiles-page" class="page">
+        <div class="controls-bar">
+            <div class="search-container">
+                <i class="fa-solid fa-search search-icon"></i>
+                <input type="text" id="tiles-search" class="search-input" placeholder="Search subjects...">
+            </div>
+            <div class="filter-dropdown">
+                <button class="filter-button" id="filter-button">
+                    <i class="fa-solid fa-filter"></i>
+                    <span id="filter-label">All Categories</span>
+                </button>
+                <div class="filter-menu" id="filter-menu">
+<div class="filter-option selected" data-filter="all">
+    <span class="filter-badge" style="background:#94a3b8;"></span>
+    All Categories
+</div>
+<div class="filter-option" data-filter="Private">
+    <span class="filter-badge private"></span>
+    Private
+</div>
+<div class="filter-option" data-filter="Public">
+    <span class="filter-badge public"></span>
+    Public
+</div>
+<div class="filter-option" data-filter="Work in Progress">
+    <span class="filter-badge wip"></span>
+    WIP
+</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <h2 id="tiles-page-title">Subjects</h2>
+            <p class="subtitle">Select a subject to view details</p>
+        </div>
+
+        <div class="tiles-grid" id="main-tiles-grid"></div>
+    </div>
+
+    <div id="subtiles-page" class="page">
+        <div class="controls-bar">
+            <div class="search-container">
+                <i class="fa-solid fa-search search-icon"></i>
+                <input type="text" id="subtiles-search" class="search-input" placeholder="Search documents...">
+            </div>
+            <div class="filter-dropdown">
+                <button class="filter-button" id="filter-button-sub">
+                    <i class="fa-solid fa-filter"></i>
+                    <span id="filter-label-sub">All Categories</span>
+                </button>
+                <div class="filter-menu" id="filter-menu-sub">
+<div class="filter-option selected" data-filter="all">
+    <span class="filter-badge" style="background:#94a3b8;"></span>
+    All Categories
+</div>
+<div class="filter-option" data-filter="Private">
+    <span class="filter-badge private"></span>
+    Private
+</div>
+<div class="filter-option" data-filter="Public">
+    <span class="filter-badge public"></span>
+    Public
+</div>
+<div class="filter-option" data-filter="Work in Progress">
+    <span class="filter-badge wip"></span>
+    WIP
+</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-header">
+            <h2 id="subtiles-page-title">Related Documents</h2>
+            <p class="subtitle">Requirements and deliverables</p>
+        </div>
+
+        <div class="sub-tiles-grid" id="sub-tiles-grid"></div>
+    </div>
+</div>
+
+<script>
+window.tilesData = [
+    {
+        "id": "13",
+        "title": "Digital Component Catalogue",
+        "colour": "blue",
+        "category": "Private",
+        "type": "sub-tile",
+        "icon": "fa-regular fa-box-open",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/a9e20b58-7f06-4363-bf8c-57996566b033",
+        "tags": [
+            "BMJ",
+            "AMJ",
+            "LTC",
+            "Third Party"
+        ],
+        "parent_id": "10"
+    },
+    {
+        "id": "12",
+        "title": "Design Information Requirements (LOIN)",
+        "colour": "light-blue",
+        "category": "Public",
+        "type": "sub-tile",
+        "icon": "fa-solid fa-wallet",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/04670203-cff8-4de6-9906-3bb57403b497",
+        "tags": [
+            "BMJ",
+            "AMJ",
+            "LTC"
+        ],
+        "parent_id": "6"
+    },
+    {
+        "id": "14",
+        "title": "Supply Chain Information Requirements",
+        "colour": "orange",
+        "category": "Work in Progress",
+        "type": "sub-tile",
+        "icon": "fa-solid fa-pen-to-square",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/5b508732-22b0-4d4c-ab39-567524fe7584",
+        "tags": [
+            "BMJ"
+        ],
+        "parent_id": "6"
+    },
+    {
+        "id": "11",
+        "title": "New Topic",
+        "colour": "orange",
+        "category": "Work in Progress",
+        "type": "sub-tile",
+        "icon": "fa-solid fa-arrows-spin",
+        "url": "",
+        "tags": [
+            "BMJ"
+        ],
+        "parent_id": "8"
+    },
+    {
+        "id": "1",
+        "title": "Master Information Delivery Plan",
+        "colour": "light-blue",
+        "category": "Public",
+        "type": "tile",
+        "icon": "fa-regular fa-calendar-check",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/00bc1ac1-b4a3-4ada-a4ee-1cd93c8d6e9c",
+        "tags": [
+            "AMJ",
+            "BMJ"
+        ],
+        "parent_id": "None"
+    },
+    {
+        "id": "3",
+        "title": "Consents Register",
+        "colour": "blue",
+        "category": "Private",
+        "type": "tile",
+        "icon": "fa-solid fa-landmark",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/7322d21d-4504-4ee9-991f-df06dae35a8b",
+        "tags": [
+            "BMJ"
+        ],
+        "parent_id": "None"
+    },
+    {
+        "id": "4",
+        "title": "Temporary Works Register",
+        "colour": "blue",
+        "category": "Private",
+        "type": "tile",
+        "icon": "fa-solid fa-helmet-safety",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/6acf8fde-8782-45f9-85d2-b9978f3ff5b9",
+        "tags": [
+            "BMJ"
+        ],
+        "parent_id": "None"
+    },
+    {
+        "id": "6",
+        "title": "Digital Engineering Management",
+        "colour": "blue",
+        "category": "Private",
+        "type": "tile",
+        "icon": "fa-solid fa-cube",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/a9e20b58-7f06-4363-bf8c-57996566b033",
+        "tags": [
+            "BMJ"
+        ],
+        "parent_id": "None"
+    },
+    {
+        "id": "7",
+        "title": "Programme Management",
+        "colour": "blue",
+        "category": "Private",
+        "type": "tile",
+        "icon": "fa-regular fa-calendar-check",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/0408eea1-710f-4e80-90c3-8d6fca0189d5",
+        "tags": [
+            "BMJ",
+            "AMJ"
+        ],
+        "parent_id": "None"
+    },
+    {
+        "id": "9",
+        "title": "Information Standards",
+        "colour": "light-blue",
+        "category": "Public",
+        "type": "tile",
+        "icon": "fa-solid fa-car-tunnel",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/9e4e04d7-1328-4a83-9b32-0a954a4ee9f2",
+        "tags": [
+            "BMJ",
+            "AMJ",
+            "LTC",
+            "Third Party"
+        ],
+        "parent_id": "None"
+    },
+    {
+        "id": "10",
+        "title": "Monthly Progress Report",
+        "colour": "light-blue",
+        "category": "Public",
+        "type": "tile",
+        "icon": "fa-solid fa-chart-area",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/88f05063-6233-42fa-a939-0fe11f5069f5",
+        "tags": [
+            "BMJ"
+        ],
+        "parent_id": "None"
+    },
+    {
+        "id": "5",
+        "title": "Procurement Management",
+        "colour": "orange",
+        "category": "Work in Progress",
+        "type": "tile",
+        "icon": "fa-solid fa-cart-shopping",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/19242ecc-a357-4116-8863-5933532f61d5",
+        "tags": [
+            "BMJ"
+        ],
+        "parent_id": "None"
+    },
+    {
+        "id": "2",
+        "title": "Carbon Management",
+        "colour": "orange",
+        "category": "Work in Progress",
+        "type": "tile",
+        "icon": "fa-solid fa-seedling",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/fd77907f-eeb8-4ef2-bd63-04b710630589",
+        "tags": [
+            "BMJ",
+            "AMJ"
+        ],
+        "parent_id": "None"
+    },
+    {
+        "id": "8",
+        "title": "Land Access",
+        "colour": "orange",
+        "category": "Work in Progress",
+        "type": "tile",
+        "icon": "fa-solid fa-map-location-dot",
+        "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/b2aa7c13-07e2-42e2-b51b-a5d02d14dd1e",
+        "tags": [
+            "BMJ"
+        ],
+        "parent_id": "None"
+    },
+    {
+        "id": "15",
+        "title": "Help Centre",
+        "colour": "orange",
+        "category": "Work in Progress",
+        "type": "tile",
+        "icon": "fa-solid fa-square",
+        "url": "",
+        "tags": [
+            "Help Centre"
+        ],
+        "parent_id": "None"
+    }
+];
+</script>
+<script src="scripts/app.js"></script>
+</body>
+</html>
