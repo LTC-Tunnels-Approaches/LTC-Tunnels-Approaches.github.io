@@ -1,0 +1,285 @@
+
+:root {
+    --bg-page: #fafafa;
+    --bg-card: #ffffff;
+    --border-subtle: #e5e7eb;
+    --text-main: #111827;
+    --text-muted: #6b7280;
+    --accent: #111827;
+    --shadow-soft: 0 10px 25px rgba(15, 23, 42, 0.08);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg-page);
+    color: var(--text-main);
+}
+
+/* Root layout */
+.hub-root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.hub-header {
+    padding: 1.5rem 1.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+}
+
+.hub-title-block h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* Main layout */
+.hub-main {
+    flex: 1;
+    padding: 1.5rem 1.75rem 2rem;
+}
+
+.hub-main-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
+    gap: 1.5rem;
+}
+
+/* Left: groups & tiles */
+.groups-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.group-section {
+    background: var(--bg-card);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-subtle);
+    padding: 1rem 1.25rem 1.25rem;
+    box-shadow: var(--shadow-soft);
+}
+
+.group-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.group-header-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-subtle);
+}
+
+.group-header-icon i {
+    font-size: 1.2rem;
+}
+
+.group-header-text h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.group-header-text p {
+    margin: 0.15rem 0 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Tiles grid */
+.tiles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+}
+
+/* Tile cards - with colored gradients */
+.tile-card {
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    text-align: left;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    color: white;
+}
+
+.tile-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.tile-card-icon {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.tile-card-icon i {
+    font-size: 1.25rem;
+}
+
+.tile-card-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.tile-card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: white;
+}
+
+.tile-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+/* Category badges */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border-radius: 999px;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.badge i {
+    font-size: 0.75rem;
+}
+
+/* Right: detail panel */
+.hub-main-right {
+    min-width: 0;
+}
+
+.detail-panel {
+    background: var(--bg-card);
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-subtle);
+    padding: 1rem 1.25rem 1.25rem;
+    box-shadow: var(--shadow-soft);
+    min-height: 260px;
+}
+
+.detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    border: 1px solid var(--border-subtle);
+    padding: 0.4rem 0.75rem;
+    font-size: 0.8rem;
+    background: var(--bg-card);
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+.back-button:hover {
+    background: var(--bg-page);
+    border-color: var(--accent);
+}
+
+.back-button i {
+    font-size: 0.8rem;
+}
+
+.detail-header-text h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.detail-header-text p {
+    margin: 0.2rem 0 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.detail-content {
+    font-size: 0.9rem;
+    color: var(--text-main);
+}
+
+.detail-placeholder p {
+    margin: 0.25rem 0;
+}
+
+/* Sub-page tiles (20% smaller - scale 0.8) */
+.sub-page .tile-card {
+    transform: scale(0.8);
+    transform-origin: top left;
+}
+
+.sub-page .tiles-grid {
+    gap: 0.6rem;
+}
+
+/* Empty state */
+.empty-state {
+    padding: 1.5rem 1.25rem;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+    .hub-main-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .hub-main-right {
+        order: -1;
+    }
+}
+
+@media (max-width: 640px) {
+    .hub-main {
+        padding: 1rem 1rem 1.5rem;
+    }
+
+    .hub-header {
+        padding: 1rem;
+    }
+}

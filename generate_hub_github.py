@@ -5,24 +5,29 @@ import os
 import json
 import sys
 
+
 # Get API token from GitHub secrets (not .env)
 API_TOKEN = os.getenv("MORTA_API_TOKEN")
 if not API_TOKEN:
     print("❌ ERROR: MORTA_API_TOKEN not set in GitHub secrets")
     sys.exit(1)
 
+
 API_URL = (
     "https://api.morta.io/v1/table/views/"
     "6dbab052-7c8c-4f6b-b4d8-595ec7d2794a/rows?size=1000"
 )
+
 
 script_dir = Path(__file__).parent
 css_folder = script_dir / "styles"
 scripts_folder = script_dir / "scripts"
 output_html_file = script_dir / "index.html"
 
+
 css_folder.mkdir(parents=True, exist_ok=True)
 scripts_folder.mkdir(parents=True, exist_ok=True)
+
 
 print("📡 Fetching data from Morta API...")
 headers = {
@@ -35,11 +40,14 @@ if response.status_code != 200:
     print(f"❌ API request failed: {response.status_code} {response.text}")
     sys.exit(1)
 
+
 print("✅ Data fetched successfully")
+
 
 json_data = response.json()
 rows = [item.get("rowData") for item in json_data.get("data", []) if item.get("rowData")]
 df = pd.DataFrame(rows)
+
 
 if "Tile_Id" in df.columns:
     df.rename(columns={"Tile_Id": "id"}, inplace=True)
@@ -52,6 +60,7 @@ if "parent_id" in df.columns:
     df["parent_id"] = df["parent_id"].astype(str)
 else:
     df["parent_id"] = None
+
 
 DEFAULT_ICONS = {
     "Master Information Delivery Plan": "fa-regular fa-calendar-check",
@@ -66,6 +75,7 @@ DEFAULT_ICONS = {
     "Monthly Progress Report": "fa-solid fa-chart-area",
 }
 
+
 GROUP_ICONS = {
     "BMJ": "fa-solid fa-helmet-safety",
     "AMJ": "fa-solid fa-pen-ruler",
@@ -74,27 +84,31 @@ GROUP_ICONS = {
     "Help Centre": "fa-solid fa-circle-info",
 }
 
+
 GROUP_COLORS = {
-    "BMJ": "linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)",
+    "BMJ": "linear-gradient(135deg, #ea580c 0%, #c2410c 100%)",
     "AMJ": "linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)",
     "LTC": "linear-gradient(135deg, #0891b2 0%, #0e7490 100%)",
     "Third Party": "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
     "Help Centre": "linear-gradient(135deg, #64748b 0%, #475569 100%)",
 }
 
+
 GROUP_LABELS = {
     "BMJ": ("BMJ", "Joint Venture"),
     "AMJ": ("AMJ", "Designers"),
-    "LTC": ("LTC", "Project"),
+    "LTC": ("LTC", "Client"),
     "Third Party": ("Third Party", "Supply Chain"),
     "Help Centre": ("Help Centre", "Support"),
 }
+
 
 def get_icon(row: pd.Series) -> str:
     icon = row.get("icon")
     if isinstance(icon, str) and icon.strip():
         return icon.strip()
     return DEFAULT_ICONS.get(row.get("title"), "fa-solid fa-square")
+
 
 def parse_tags(raw) -> list:
     if isinstance(raw, list):
@@ -111,6 +125,7 @@ def parse_tags(raw) -> list:
         return [p.strip() for p in txt.split(",") if p.strip()]
     return ["BMJ"]
 
+
 df = df.sort_values(["type", "order"])
 tiles_data = []
 for _, row in df.iterrows():
@@ -126,7 +141,9 @@ for _, row in df.iterrows():
         "parent_id": str(row["parent_id"]) if pd.notna(row["parent_id"]) else None,
     })
 
+
 tiles_json = json.dumps(tiles_data, indent=4)
+
 
 unique_categories = sorted(set(tile['category'] for tile in tiles_data if tile['category']))
 main_tiles = [t for t in tiles_data if t['type'] == 'tile']
@@ -134,14 +151,17 @@ found_groups = set(tag for tile in main_tiles for tag in tile['tags'] if tag in 
 preferred_order = ["BMJ", "AMJ", "LTC", "Third Party", "Help Centre"]
 active_groups = [g for g in preferred_order if g in found_groups]
 
+
 print(f"✅ Categories: {unique_categories}")
 print(f"✅ Active groups: {active_groups}")
+
 
 category_badge_map = {
     'Public': ('public', 'fa-solid fa-lock-open', 'Public'),
     'Private': ('private', 'fa-solid fa-lock', 'Private'),
     'Work in Progress': ('wip', 'fa-solid fa-spinner', 'WIP'),
 }
+
 
 def generate_filter_options_html():
     html = '<div class="filter-option selected" data-filter="all">\n'
@@ -154,6 +174,7 @@ def generate_filter_options_html():
         html += f'    {display_text}\n</div>\n'
     return html
 
+
 def generate_group_tiles_html():
     html = ""
     for group in active_groups:
@@ -165,6 +186,7 @@ def generate_group_tiles_html():
         html += '</button>\n'
     return html
 
+
 def generate_group_css():
     css = ""
     for group in active_groups:
@@ -172,12 +194,14 @@ def generate_group_css():
         css += f'.main-group-tile[data-group="{group}"] {{ background: {gradient}; }}\n'
     return css
 
+
 filter_options_html = generate_filter_options_html()
 group_tiles_html = generate_group_tiles_html()
 group_css = generate_group_css()
 
+
 main_css = r"""* { box-sizing: border-box; }
-body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); min-height: 100vh; }
+body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; background: #ffffff; min-height: 100vh; }
 .page-container { max-width: 1400px; margin: 0 auto; padding: 40px 24px 60px; }
 .page-title { margin: 0 0 48px; font-size: 36px; font-weight: 700; color: #1e293b; text-align: center; letter-spacing: -0.5px; }
 .page-subtitle { text-align: center; color: #64748b; font-size: 16px; margin: -36px 0 48px; }
@@ -214,7 +238,7 @@ body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Sego
 .main-group-tile .main-group-icon i { color: #fff !important; }
 .main-group-tile .main-group-label { font-size: 17px; font-weight: 600; text-align: center; letter-spacing: 0.3px; color: #fff; }
 .main-group-tile:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 12px 32px rgba(0,0,0,0.18); }
-.page-header { margin-bottom: 40px; padding-top: 70px; text-align: center; }
+.page-header { margin-bottom: 40px; text-align: center; }
 .page-header h2 { margin: 0 0 8px; font-size: 32px; color: #1e293b; font-weight: 700; letter-spacing: -0.5px; }
 .page-header .subtitle { color: #64748b; font-size: 15px; }
 .tiles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; }
@@ -249,8 +273,10 @@ body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Sego
 @media (max-width: 768px) { .main-groups-grid { grid-template-columns: repeat(2, 1fr); } .tiles-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); } .page-title { font-size: 28px; } .controls-bar { position: static; width: 100%; margin-bottom: 24px; flex-direction: column; } .search-container { width: 100%; } .page-header { padding-top: 20px; } }
 """
 
+
 (css_folder / "main.css").write_text(main_css, encoding="utf-8")
 print("✅ CSS generated")
+
 
 app_js = r"""const DEFAULT_ICON = "fa-solid fa-square";
 let currentGroup = null;
@@ -258,6 +284,7 @@ let currentParentTile = null;
 let navigationStack = [];
 let currentFilter = 'all';
 let currentFilterSub = 'all';
+
 
 const mainPage = document.getElementById('main-page');
 const tilesPage = document.getElementById('tiles-page');
@@ -267,14 +294,7 @@ const tilesPageTitle = document.getElementById('tiles-page-title');
 const subtilesPageTitle = document.getElementById('subtiles-page-title');
 const mainTilesGrid = document.getElementById('main-tiles-grid');
 const subTilesGrid = document.getElementById('sub-tiles-grid');
-const tilesSearch = document.getElementById('tiles-search');
-const subtilesSearch = document.getElementById('subtiles-search');
-const filterButton = document.getElementById('filter-button');
-const filterMenu = document.getElementById('filter-menu');
-const filterLabel = document.getElementById('filter-label');
-const filterButtonSub = document.getElementById('filter-button-sub');
-const filterMenuSub = document.getElementById('filter-menu-sub');
-const filterLabelSub = document.getElementById('filter-label-sub');
+
 
 const categoryIcons = {
     'Public': '<i class="fa-solid fa-lock-open badge-icon"></i>',
@@ -282,11 +302,13 @@ const categoryIcons = {
     'Work in Progress': '<i class="fa-solid fa-spinner badge-icon"></i>'
 };
 
+
 function createTileHTML(tile, hasSubtiles = false, isClickable = true) {
     const categoryClass = tile.category.toLowerCase().replace(/ /g, '-');
     const subtileIndicator = hasSubtiles ? "has-subtiles" : "";
     const iconClass = (tile.icon && tile.icon.trim()) ? tile.icon : DEFAULT_ICON;
     const categoryBadge = `<div class="tile-category-badge ${categoryClass}">${categoryIcons[tile.category] || ''}${tile.category === 'Work in Progress' ? 'WIP' : tile.category}</div>`;
+
 
     if (hasSubtiles && isClickable) {
         return `<div class="tile ${tile.colour} ${subtileIndicator}" data-id="${tile.id}" data-title="${tile.title.toLowerCase()}" data-category="${tile.category}" data-clickable="true" style="cursor: pointer;">${categoryBadge}<div class="tile-content"><div class="tile-icon"><i class="${iconClass}"></i></div><div class="tile-title">${tile.title}</div></div></div>`;
@@ -297,11 +319,13 @@ function createTileHTML(tile, hasSubtiles = false, isClickable = true) {
     }
 }
 
+
 function showPage(pageId) {
     [mainPage, tilesPage, subtilesPage].forEach(p => p.classList.remove('active'));
     document.getElementById(pageId).classList.add('active');
     backButton.classList.toggle('visible', pageId !== 'main-page');
 }
+
 
 function goBack() {
     if (navigationStack.length > 0) {
@@ -319,6 +343,7 @@ function goBack() {
     }
 }
 
+
 function showTilesForGroup(groupName) {
     currentGroup = groupName;
     navigationStack = ['main'];
@@ -326,8 +351,7 @@ function showTilesForGroup(groupName) {
     const mainTiles = window.tilesData.filter(t => t.type === 'tile' && Array.isArray(t.tags) && t.tags.includes(groupName));
     const tilesWithSubtiles = new Set();
     window.tilesData.forEach(t => { if (t.type === 'sub-tile' && t.parent_id) tilesWithSubtiles.add(t.parent_id); });
-    
-    tilesPageTitle.textContent = groupName + " Subjects";
+
     if (mainTiles.length > 0) {
         mainTilesGrid.innerHTML = mainTiles.map(tile => createTileHTML(tile, tilesWithSubtiles.has(tile.id), true)).join('');
         mainTilesGrid.querySelectorAll('.tile[data-clickable="true"]').forEach(tileEl => {
@@ -341,13 +365,10 @@ function showTilesForGroup(groupName) {
         mainTilesGrid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-folder-open"></i><p>No subjects available for ${groupName}</p></div>`;
     }
 
-    tilesSearch.value = '';
-    filterLabel.textContent = 'All Categories';
-    filterButton.classList.remove('active');
-    filterMenu.querySelectorAll('.filter-option').forEach(o => o.classList.remove('selected'));
-    filterMenu.querySelector('[data-filter="all"]').classList.add('selected');
+
     showPage('tiles-page');
 }
+
 
 function showSubTilesForParent(parentId) {
     currentParentTile = parentId;
@@ -355,119 +376,20 @@ function showSubTilesForParent(parentId) {
     currentFilterSub = 'all';
     const parentTile = window.tilesData.find(t => t.id === parentId);
     const subTiles = window.tilesData.filter(t => t.type === 'sub-tile' && t.parent_id === parentId && Array.isArray(t.tags) && t.tags.includes(currentGroup));
-    
-    if (parentTile) subtilesPageTitle.textContent = parentTile.title;
+
     if (subTiles.length > 0) {
         subTilesGrid.innerHTML = subTiles.map(tile => createTileHTML(tile, false, false)).join('');
     } else {
         subTilesGrid.innerHTML = `<div class="empty-state"><i class="fa-solid fa-folder-open"></i><p>No related documents available</p></div>`;
     }
 
-    subtilesSearch.value = '';
-    filterLabelSub.textContent = 'All Categories';
-    filterButtonSub.classList.remove('active');
-    filterMenuSub.querySelectorAll('.filter-option').forEach(o => o.classList.remove('selected'));
-    filterMenuSub.querySelector('[data-filter="all"]').classList.add('selected');
+
     showPage('subtiles-page');
 }
 
-function applyFilters(searchTerm, categoryFilter, gridElement) {
-    const tiles = gridElement.querySelectorAll('.tile');
-    const term = searchTerm.toLowerCase().trim();
-    let visibleCount = 0;
-    
-    tiles.forEach(tile => {
-        const titleEl = tile.querySelector('.tile-title');
-        const title = titleEl ? titleEl.textContent.toLowerCase() : '';
-        const category = tile.getAttribute('data-category') || '';
-        const matchesSearch = term === '' || title.includes(term);
-        const matchesCategory = categoryFilter === 'all' || category === categoryFilter;
-        
-        if (matchesSearch && matchesCategory) {
-            tile.style.display = '';
-            visibleCount++;
-        } else {
-            tile.style.display = 'none';
-        }
-    });
-}
-
-filterButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    filterMenu.classList.toggle('show');
-});
-
-filterButtonSub.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    filterMenuSub.classList.toggle('show');
-});
-
-document.addEventListener('click', (e) => {
-    if (!filterButton.contains(e.target) && !filterMenu.contains(e.target)) {
-        filterMenu.classList.remove('show');
-    }
-    if (!filterButtonSub.contains(e.target) && !filterMenuSub.contains(e.target)) {
-        filterMenuSub.classList.remove('show');
-    }
-});
-
-filterMenu.querySelectorAll('.filter-option').forEach(option => {
-    option.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const filter = option.getAttribute('data-filter');
-        
-        filterMenu.querySelectorAll('.filter-option').forEach(o => o.classList.remove('selected'));
-        option.classList.add('selected');
-        
-        if (filter === 'all') {
-            filterLabel.textContent = 'All Categories';
-            filterButton.classList.remove('active');
-        } else {
-            filterLabel.textContent = filter === 'Work in Progress' ? 'WIP' : filter;
-            filterButton.classList.add('active');
-        }
-        
-        currentFilter = filter;
-        applyFilters(tilesSearch.value, currentFilter, mainTilesGrid);
-        filterMenu.classList.remove('show');
-    });
-});
-
-filterMenuSub.querySelectorAll('.filter-option').forEach(option => {
-    option.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const filter = option.getAttribute('data-filter');
-        
-        filterMenuSub.querySelectorAll('.filter-option').forEach(o => o.classList.remove('selected'));
-        option.classList.add('selected');
-        
-        if (filter === 'all') {
-            filterLabelSub.textContent = 'All Categories';
-            filterButtonSub.classList.remove('active');
-        } else {
-            filterLabelSub.textContent = filter === 'Work in Progress' ? 'WIP' : filter;
-            filterButtonSub.classList.add('active');
-        }
-        
-        currentFilterSub = filter;
-        applyFilters(subtilesSearch.value, currentFilterSub, subTilesGrid);
-        filterMenuSub.classList.remove('show');
-    });
-});
-
-tilesSearch.addEventListener('input', (e) => {
-    applyFilters(e.target.value, currentFilter, mainTilesGrid);
-});
-
-subtilesSearch.addEventListener('input', (e) => {
-    applyFilters(e.target.value, currentFilterSub, subTilesGrid);
-});
 
 backButton.addEventListener('click', goBack);
+
 
 document.querySelectorAll('.main-group-tile').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -476,11 +398,14 @@ document.querySelectorAll('.main-group-tile').forEach(btn => {
     });
 });
 
-console.log("✅ Hub initialised - filters and search working");
+
+console.log("✅ Hub initialised");
 """
+
 
 (scripts_folder / "app.js").write_text(app_js, encoding="utf-8")
 print("✅ JavaScript generated")
+
 
 html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -493,67 +418,30 @@ html = f"""<!DOCTYPE html>
 </head>
 <body>
 
+
 <button class="back-button" id="back-button">
     <i class="fa-solid fa-arrow-left"></i>
     Back
 </button>
 
+
 <div class="page-container">
     <div id="main-page" class="page active">
-        <h1 class="page-title">LTC Tunnels & Approaches</h1>
-        <p class="page-subtitle">Information Hub</p>
         <div class="main-groups-grid">
 {group_tiles_html}        </div>
     </div>
 
+
     <div id="tiles-page" class="page">
-        <div class="controls-bar">
-            <div class="search-container">
-                <i class="fa-solid fa-search search-icon"></i>
-                <input type="text" id="tiles-search" class="search-input" placeholder="Search subjects...">
-            </div>
-            <div class="filter-dropdown">
-                <button class="filter-button" id="filter-button">
-                    <i class="fa-solid fa-filter"></i>
-                    <span id="filter-label">All Categories</span>
-                </button>
-                <div class="filter-menu" id="filter-menu">
-{filter_options_html}                </div>
-            </div>
-        </div>
-
-        <div class="page-header">
-            <h2 id="tiles-page-title">Subjects</h2>
-            <p class="subtitle">Select a subject to view details</p>
-        </div>
-
         <div class="tiles-grid" id="main-tiles-grid"></div>
     </div>
 
+
     <div id="subtiles-page" class="page">
-        <div class="controls-bar">
-            <div class="search-container">
-                <i class="fa-solid fa-search search-icon"></i>
-                <input type="text" id="subtiles-search" class="search-input" placeholder="Search documents...">
-            </div>
-            <div class="filter-dropdown">
-                <button class="filter-button" id="filter-button-sub">
-                    <i class="fa-solid fa-filter"></i>
-                    <span id="filter-label-sub">All Categories</span>
-                </button>
-                <div class="filter-menu" id="filter-menu-sub">
-{filter_options_html}                </div>
-            </div>
-        </div>
-
-        <div class="page-header">
-            <h2 id="subtiles-page-title">Related Documents</h2>
-            <p class="subtitle">Requirements and deliverables</p>
-        </div>
-
         <div class="sub-tiles-grid" id="sub-tiles-grid"></div>
     </div>
 </div>
+
 
 <script>
 window.tilesData = {tiles_json};
@@ -563,8 +451,10 @@ window.tilesData = {tiles_json};
 </html>
 """
 
+
 output_html_file.write_text(html, encoding="utf-8")
 print("✅ HTML generated")
+
 
 print("\n" + "="*50)
 print("✅ HUB GENERATION COMPLETE")
