@@ -9,15 +9,15 @@
 </head>
 <body>
 
+
 <button class="back-button" id="back-button">
     <i class="fa-solid fa-arrow-left"></i>
     Back
 </button>
 
+
 <div class="page-container">
     <div id="main-page" class="page active">
-        <h1 class="page-title">LTC Tunnels & Approaches</h1>
-        <p class="page-subtitle">Information Hub</p>
         <div class="main-groups-grid">
 <button class="main-group-tile" data-group="BMJ">
     <div class="main-group-icon"><i class="fa-solid fa-helmet-safety"></i></div>
@@ -26,10 +26,6 @@
 <button class="main-group-tile" data-group="AMJ">
     <div class="main-group-icon"><i class="fa-solid fa-pen-ruler"></i></div>
     <div class="main-group-label">AMJ<br><small style="font-size:12px;opacity:0.9;font-weight:400;">Designers</small></div>
-</button>
-<button class="main-group-tile" data-group="LTC">
-    <div class="main-group-icon"><i class="fa-solid fa-road-bridge"></i></div>
-    <div class="main-group-label">LTC<br><small style="font-size:12px;opacity:0.9;font-weight:400;">Project</small></div>
 </button>
 <button class="main-group-tile" data-group="Third Party">
     <div class="main-group-icon"><i class="fa-solid fa-handshake"></i></div>
@@ -42,86 +38,17 @@
         </div>
     </div>
 
+
     <div id="tiles-page" class="page">
-        <div class="controls-bar">
-            <div class="search-container">
-                <i class="fa-solid fa-search search-icon"></i>
-                <input type="text" id="tiles-search" class="search-input" placeholder="Search subjects...">
-            </div>
-            <div class="filter-dropdown">
-                <button class="filter-button" id="filter-button">
-                    <i class="fa-solid fa-filter"></i>
-                    <span id="filter-label">All Categories</span>
-                </button>
-                <div class="filter-menu" id="filter-menu">
-<div class="filter-option selected" data-filter="all">
-    <span class="filter-badge" style="background:#94a3b8;"></span>
-    All Categories
-</div>
-<div class="filter-option" data-filter="Private">
-    <span class="filter-badge private"></span>
-    Private
-</div>
-<div class="filter-option" data-filter="Public">
-    <span class="filter-badge public"></span>
-    Public
-</div>
-<div class="filter-option" data-filter="Work in Progress">
-    <span class="filter-badge wip"></span>
-    WIP
-</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="page-header">
-            <h2 id="tiles-page-title">Subjects</h2>
-            <p class="subtitle">Select a subject to view details</p>
-        </div>
-
         <div class="tiles-grid" id="main-tiles-grid"></div>
     </div>
 
+
     <div id="subtiles-page" class="page">
-        <div class="controls-bar">
-            <div class="search-container">
-                <i class="fa-solid fa-search search-icon"></i>
-                <input type="text" id="subtiles-search" class="search-input" placeholder="Search documents...">
-            </div>
-            <div class="filter-dropdown">
-                <button class="filter-button" id="filter-button-sub">
-                    <i class="fa-solid fa-filter"></i>
-                    <span id="filter-label-sub">All Categories</span>
-                </button>
-                <div class="filter-menu" id="filter-menu-sub">
-<div class="filter-option selected" data-filter="all">
-    <span class="filter-badge" style="background:#94a3b8;"></span>
-    All Categories
-</div>
-<div class="filter-option" data-filter="Private">
-    <span class="filter-badge private"></span>
-    Private
-</div>
-<div class="filter-option" data-filter="Public">
-    <span class="filter-badge public"></span>
-    Public
-</div>
-<div class="filter-option" data-filter="Work in Progress">
-    <span class="filter-badge wip"></span>
-    WIP
-</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="page-header">
-            <h2 id="subtiles-page-title">Related Documents</h2>
-            <p class="subtitle">Requirements and deliverables</p>
-        </div>
-
         <div class="sub-tiles-grid" id="sub-tiles-grid"></div>
     </div>
 </div>
+
 
 <script>
 window.tilesData = [
@@ -136,7 +63,6 @@ window.tilesData = [
         "tags": [
             "BMJ",
             "AMJ",
-            "LTC",
             "Third Party"
         ],
         "parent_id": "10"
@@ -151,8 +77,7 @@ window.tilesData = [
         "url": "https://app.morta.io/hub/2e7210e0-76c0-4809-8bb9-089c2c184d08/document/04670203-cff8-4de6-9906-3bb57403b497",
         "tags": [
             "BMJ",
-            "AMJ",
-            "LTC"
+            "AMJ"
         ],
         "parent_id": "6"
     },
@@ -260,7 +185,6 @@ window.tilesData = [
         "tags": [
             "BMJ",
             "AMJ",
-            "LTC",
             "Third Party"
         ],
         "parent_id": "None"
