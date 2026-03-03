@@ -4,20 +4,30 @@ from pathlib import Path
 import os
 import json
 import sys
+import ast
 
 
 # Get API token from GitHub secrets (not .env)
-API_TOKEN = os.getenv("MORTA_API_TOKEN")
+API_TOKEN = '_-7pBs6kmgiyM_B9cspf6tOJVHmAlIwTZ1uBqj73kEc'
 if not API_TOKEN:
     print("❌ ERROR: MORTA_API_TOKEN not set in GitHub secrets")
     sys.exit(1)
 
 
-API_URL = (
+API_URL_RESSOURCES = (
     "https://api.morta.io/v1/table/views/"
-    "6dbab052-7c8c-4f6b-b4d8-595ec7d2794a/rows?size=1000"
+    "2f31d47c-9fb9-4c86-b317-faf939a378f8/rows?size=1000"
 )
 
+API_URL_CATEGORIES = (
+    "https://api.morta.io/v1/table/views/"
+    "23868b37-e533-4ec6-9771-3011ca919821/rows?size=1000"
+)
+
+API_URL_GROUPS = (
+    "https://api.morta.io/v1/table/views/"
+    "08fde1d0-aea3-46b5-80ae-58292bf73958/rows?size=1000"
+)
 
 script_dir = Path(__file__).parent
 css_folder = script_dir / "styles"
@@ -30,36 +40,60 @@ scripts_folder.mkdir(parents=True, exist_ok=True)
 
 
 print("📡 Fetching data from Morta API...")
+#Getting the tiles data
 headers = {
     "Accept": "application/json",
     "Authorization": f"Bearer {API_TOKEN}",
     "Content-Type": "application/json",
 }
-response = requests.get(API_URL, headers=headers, verify=False)
-if response.status_code != 200:
-    print(f"❌ API request failed: {response.status_code} {response.text}")
+ressources_tiles = requests.get(API_URL_RESSOURCES, headers=headers, verify=False)
+if ressources_tiles.status_code != 200:
+    print(f"❌ API request failed: {ressources_tiles.status_code} {ressources_tiles.text}")
     sys.exit(1)
 
 
-print("✅ Data fetched successfully")
+print("✅ Tiles fetched successfully")
+
+json_data = ressources_tiles.json()
+tiles_from_morta = [item.get("rowData") for item in json_data.get("data", []) if item.get("rowData")]
+tiles_df = pd.DataFrame(tiles_from_morta)
 
 
-json_data = response.json()
-rows = [item.get("rowData") for item in json_data.get("data", []) if item.get("rowData")]
-df = pd.DataFrame(rows)
-
-
-if "Tile_Id" in df.columns:
-    df.rename(columns={"Tile_Id": "id"}, inplace=True)
-if "order" in df.columns:
-    df["order"] = pd.to_numeric(df["order"], errors="coerce").fillna(0).astype(int)
+if "Tile_Id" in tiles_df.columns:
+    tiles_df.rename(columns={"Tile_Id": "id"}, inplace=True)
+if "order" in tiles_df.columns:
+    tiles_df["order"] = pd.to_numeric(tiles_df["order"], errors="coerce").fillna(0).astype(int)
 else:
-    df["order"] = 0
-df["id"] = df["id"].astype(str)
-if "parent_id" in df.columns:
-    df["parent_id"] = df["parent_id"].astype(str)
+    tiles_df["order"] = 0
+tiles_df["id"] = tiles_df["id"].astype(str)
+if "parent_id" in tiles_df.columns:
+    tiles_df["parent_id"] = tiles_df["parent_id"].astype(str)
 else:
-    df["parent_id"] = None
+    tiles_df["parent_id"] = None
+
+#getting categories data
+categories_response = requests.get(API_URL_CATEGORIES, headers=headers, verify=False)
+if categories_response.status_code != 200:
+    print(f"❌ API request failed: {categories_response.status_code} {categories_response.text}")
+    sys.exit(1)
+
+print("✅ Categories fetched successfully")
+
+categories_data = categories_response.json()
+categories_df = pd.DataFrame([item.get("rowData") for item in categories_data.get("data", []) if item.get("rowData")])
+
+
+#getting groups data
+groups_response = requests.get(API_URL_GROUPS, headers=headers, verify=False)
+
+if groups_response.status_code != 200:
+    print(f"❌ API request failed: {groups_response.status_code} {groups_response.text}")
+    sys.exit(1)
+
+print("✅ Groups fetched successfully")
+
+groups_data = groups_response.json()
+groups_df = pd.DataFrame([item.get("rowData") for item in groups_data.get("data", []) if item.get("rowData")])
 
 
 DEFAULT_ICONS = {
@@ -75,32 +109,6 @@ DEFAULT_ICONS = {
     "Monthly Progress Report": "fa-solid fa-chart-area",
 }
 
-
-GROUP_ICONS = {
-    "BMJ": "fa-solid fa-helmet-safety",
-    "AMJ": "fa-solid fa-pen-ruler",
-    "LTC": "fa-solid fa-road-bridge",
-    "Third Party": "fa-solid fa-handshake",
-    "Help Centre": "fa-solid fa-circle-info",
-}
-
-
-GROUP_COLORS = {
-    "BMJ": "linear-gradient(135deg, #ea580c 0%, #c2410c 100%)",
-    "AMJ": "linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%)",
-    "LTC": "linear-gradient(135deg, #0891b2 0%, #0e7490 100%)",
-    "Third Party": "linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%)",
-    "Help Centre": "linear-gradient(135deg, #64748b 0%, #475569 100%)",
-}
-
-
-GROUP_LABELS = {
-    "BMJ": ("BMJ", "Joint Venture"),
-    "AMJ": ("AMJ", "Designers"),
-    "LTC": ("LTC", "Client"),
-    "Third Party": ("Third Party", "Supply Chain"),
-    "Help Centre": ("Help Centre", "Support"),
-}
 
 
 def get_icon(row: pd.Series) -> str:
@@ -126,9 +134,9 @@ def parse_tags(raw) -> list:
     return ["BMJ"]
 
 
-df = df.sort_values(["type", "order"])
+tiles_df = tiles_df.sort_values(["type", "order"])
 tiles_data = []
-for _, row in df.iterrows():
+for _, row in tiles_df.iterrows():
     tiles_data.append({
         "id": str(row["id"]),
         "title": str(row.get("title", "Untitled")),
@@ -136,7 +144,7 @@ for _, row in df.iterrows():
         "category": str(row.get("category", "Public")),
         "type": str(row.get("type", "tile")),
         "icon": get_icon(row),
-        "url": str(row.get("url")) if pd.notna(row.get("url")) else "",
+        "url": str(row.get("⚡ URL")) if pd.notna(row.get("⚡ URL")) else "",
         "tags": parse_tags(row.get("Tags")),
         "parent_id": str(row["parent_id"]) if pd.notna(row["parent_id"]) else None,
     })
@@ -145,10 +153,173 @@ for _, row in df.iterrows():
 tiles_json = json.dumps(tiles_data, indent=4)
 
 
+# Build group maps from groups_df if available
+def build_group_maps(groups_df: pd.DataFrame):
+    icons = {}
+    colors = {}
+    labels = {}
+    if groups_df is None or groups_df.empty:
+        return icons, colors, labels
+
+    for _, row in groups_df.iterrows():
+        name = None
+        for col in ('Group Name', 'Name', 'group'):
+            if col in groups_df.columns and pd.notna(row.get(col)):
+                name = str(row.get(col)).strip()
+                break
+        if not name:
+            continue
+
+        # Group icon
+        if 'Group Icon' in groups_df.columns and pd.notna(row.get('Group Icon')):
+            icons[name] = str(row.get('Group Icon')).strip()
+
+        # Group color
+        if 'Group Color' in groups_df.columns and pd.notna(row.get('Group Color')):
+            colors[name] = str(row.get('Group Color')).strip()
+
+        # Group label and subtitle
+        label = None
+        subtitle = None
+        if 'Group Label' in groups_df.columns and pd.notna(row.get('Group Label')):
+            label = str(row.get('Group Label')).strip()
+        if 'Group Subtitle' in groups_df.columns and pd.notna(row.get('Group Subtitle')):
+            subtitle = str(row.get('Group Subtitle')).strip()
+        if label:
+            labels[name] = (label, subtitle if subtitle else "")
+
+    return icons, colors, labels
+
+
+GROUP_ICONS, GROUP_COLORS, GROUP_LABELS = build_group_maps(groups_df)
+
+# Fallbacks if parsing didn't produce values
+if not GROUP_ICONS:
+    GROUP_ICONS = {
+        "BMJ": "fa-solid fa-helmet-safety",
+        "AMJ": "fa-solid fa-pen-ruler",
+        "LTC": "fa-solid fa-road-bridge",
+        "Third Party": "fa-solid fa-handshake",
+        "Help Centre": "fa-solid fa-circle-info",
+    }
+
+if not GROUP_COLORS:
+    GROUP_COLORS = {
+        "BMJ": "linear-gradient(180deg, #e85e2c 20%, #135d3f 80%)",
+        "AMJ": "linear-gradient(180deg, #b91820 20%, #000000 80%)",
+        "LTC": "linear-gradient(180deg, #00a5aa 20%, #015457 80%)",
+        "Third Party": "linear-gradient(180deg, #44546a 20%, #000000 80%)",
+        "Help Centre": "#64748b",
+    }
+
+if not GROUP_LABELS:
+    GROUP_LABELS = {
+        "BMJ": ("BMJV", "Delivery Partners"),
+        "AMJ": ("AMJV", "Designers"),
+        "LTC": ("LTC", "Client"),
+        "Third Party": ("Third Party", "Supply Chain"),
+        "Help Centre": ("Help Centre", "Support"),
+    }
+
+
+def build_category_maps(categories_df: pd.DataFrame):
+    badge_map = {}
+    tile_colours = {}
+    tile_category_styles = {}
+    if categories_df is None or categories_df.empty:
+        return badge_map, tile_colours, tile_category_styles
+
+    for _, row in categories_df.iterrows():
+        # Category name (display)
+        name = None
+        for col in ('Category Name', 'Category', 'Category_Name'):
+            if col in categories_df.columns and pd.notna(row.get(col)):
+                name = str(row.get(col)).strip()
+                break
+        if not name:
+            continue
+
+        # Parse badge tuple
+        raw_badge = row.get('Category Badge Map') if 'Category Badge Map' in categories_df.columns else None
+        if pd.notna(raw_badge):
+            try:
+                parts = raw_badge if isinstance(raw_badge, (list, tuple)) else ast.literal_eval(str(raw_badge))
+                if isinstance(parts, (list, tuple)) and len(parts) >= 3:
+                    badge_map[name] = (str(parts[0]).strip(), str(parts[1]).strip(), str(parts[2]).strip())
+            except Exception:
+                try:
+                    s = str(raw_badge).strip().strip('()')
+                    parts = [p.strip().strip("'\"") for p in s.split(',')]
+                    if len(parts) >= 3:
+                        badge_map[name] = (parts[0], parts[1], parts[2])
+                except Exception:
+                    pass
+
+        # Tile colour name and hex code
+        colour_name = None
+        colour_code = None
+        if 'Category Color' in categories_df.columns and pd.notna(row.get('Category Color')):
+            colour_name = str(row.get('Category Color')).strip()
+        if 'Category Colour Code' in categories_df.columns and pd.notna(row.get('Category Colour Code')):
+            colour_code = str(row.get('Category Colour Code')).strip()
+
+        if colour_name and colour_code:
+            tile_colours[f"tile.{colour_name}"] = colour_code
+        elif colour_code and not colour_name:
+            tile_colours[f"tile.{name.lower().replace(' ', '-')}"] = colour_code
+        elif colour_name and not colour_code:
+            tile_colours[f"tile.{colour_name}"] = '#cccccc'
+
+        # Category style tuple
+        raw_style = row.get('Category Style') if 'Category Style' in categories_df.columns else None
+        if pd.notna(raw_style):
+            try:
+                style = raw_style if isinstance(raw_style, (list, tuple)) else ast.literal_eval(str(raw_style))
+                if isinstance(style, (list, tuple)) and len(style) >= 3:
+                    tile_category_styles[name] = (style[0], style[1], style[2])
+            except Exception:
+                try:
+                    s = str(raw_style).replace("'", '"')
+                    style = json.loads(s)
+                    if isinstance(style, list) and len(style) >= 3:
+                        tile_category_styles[name] = (style[0], style[1], style[2])
+                except Exception:
+                    pass
+
+    return badge_map, tile_colours, tile_category_styles
+
+
+# Build maps from the categories DataFrame (if available), with sensible fallbacks
+category_badge_map, TILE_COLOURS, TILE_CATEGORY_STYLES = build_category_maps(categories_df)
+
+# Fallback defaults
+if not category_badge_map:
+    category_badge_map = {
+        'Public': ('public', 'fa-solid fa-lock-open', 'Public'),
+        'Private': ('private', 'fa-solid fa-lock', 'Private'),
+        'Work in Progress': ('wip', 'fa-solid fa-spinner', 'WIP'),
+    }
+
+if not TILE_COLOURS:
+    TILE_COLOURS = {
+        "tile.blue": "#002e5f",
+        "tile.light-blue": "#058ccb",
+        "tile.orange": "#e85e2c",
+    }
+
+if not TILE_CATEGORY_STYLES:
+    TILE_CATEGORY_STYLES = {
+        "Public": ("rgba(16,185,129,0.25)", "#6ee7b7", "rgba(16,185,129,0.3)"),
+        "Private": ("rgba(99,102,241,0.25)", "#a5b4fc", "rgba(99,102,241,0.3)"),
+        "Work in Progress": ("rgba(245,158,11,0.25)", "#fcd34d", "rgba(245,158,11,0.3)"),
+    }
+
+
+
 unique_categories = sorted(set(tile['category'] for tile in tiles_data if tile['category']))
 main_tiles = [t for t in tiles_data if t['type'] == 'tile']
 found_groups = set(tag for tile in main_tiles for tag in tile['tags'] if tag in GROUP_ICONS)
-preferred_order = ["BMJ", "AMJ", "LTC", "Third Party", "Help Centre"]
+preferred_order = ["BMJ", "AMJ", "LTC", "Supply Chain", "Help Centre"]
 active_groups = [g for g in preferred_order if g in found_groups]
 
 
@@ -156,11 +327,9 @@ print(f"✅ Categories: {unique_categories}")
 print(f"✅ Active groups: {active_groups}")
 
 
-category_badge_map = {
-    'Public': ('public', 'fa-solid fa-lock-open', 'Public'),
-    'Private': ('private', 'fa-solid fa-lock', 'Private'),
-    'Work in Progress': ('wip', 'fa-solid fa-spinner', 'WIP'),
-}
+
+def get_tile_category_styles(category: str) -> tuple:
+    return TILE_CATEGORY_STYLES.get(category, ("rgba(148,163,184,0.25)", "#94a3b8", "rgba(148,163,184,0.3)"))
 
 
 def generate_filter_options_html():
@@ -190,19 +359,36 @@ def generate_group_tiles_html():
 def generate_group_css():
     css = ""
     for group in active_groups:
-        gradient = GROUP_COLORS.get(group, "linear-gradient(135deg, #64748b 0%, #475569 100%)")
-        css += f'.main-group-tile[data-group="{group}"] {{ background: {gradient}; }}\n'
+        color = GROUP_COLORS.get(group, "#64748b")
+        css += f'.main-group-tile[data-group="{group}"] {{ background: {color}; }}\n'
+    return css
+
+
+def generate_tile_colors_css():
+    css = ""
+    for selector, color in TILE_COLOURS.items():
+        css += f".{selector} {{ background: {color}; }}\n"
+    return css
+
+
+def generate_category_badge_css():
+    css = ""
+    for category, (bg, color, border) in TILE_CATEGORY_STYLES.items():
+        cls = category.lower().replace(' ', '-')
+        css += f".tile-category-badge.{cls} {{ background: {bg}; color: {color}; border: 1px solid {border}; }}\n"
     return css
 
 
 filter_options_html = generate_filter_options_html()
 group_tiles_html = generate_group_tiles_html()
 group_css = generate_group_css()
+tile_colors_css = generate_tile_colors_css()
+category_badge_css = generate_category_badge_css()
 
 
 main_css = r"""* { box-sizing: border-box; }
 body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; background: #ffffff; min-height: 100vh; }
-.page-container { max-width: 1400px; margin: 0 auto; padding: 40px 24px 60px; }
+.page-container { max-width: 1400px; margin: 0 auto; padding: 100px 24px 60px; }
 .page-title { margin: 0 0 48px; font-size: 36px; font-weight: 700; color: #1e293b; text-align: center; letter-spacing: -0.5px; }
 .page-subtitle { text-align: center; color: #64748b; font-size: 16px; margin: -36px 0 48px; }
 .controls-bar { position: absolute; top: 40px; right: 24px; display: flex; gap: 12px; align-items: center; }
@@ -245,16 +431,10 @@ body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Sego
 .tile { border-radius: 16px; color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.08); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
 .tile::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%); opacity: 0; transition: opacity 0.3s ease; }
 .tile:hover::before { opacity: 1; }
-.tile.blue { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); }
-.tile.light-blue { background: linear-gradient(135deg, #0e7490 0%, #0891b2 100%); }
-.tile.orange { background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%); }
-.tile:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.15); }
+""" + tile_colors_css + r""".tile:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.15); }
 .tile-content { padding: 28px 24px; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; }
 .tile-category-badge { position: absolute; top: 16px; right: 16px; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(10px); }
-.tile-category-badge.public { background: rgba(16,185,129,0.25); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
-.tile-category-badge.private { background: rgba(99,102,241,0.25); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3); }
-.tile-category-badge.wip { background: rgba(245,158,11,0.25); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
-.badge-icon { font-size: 10px; }
+""" + category_badge_css + r""".badge-icon { font-size: 10px; }
 .tile.has-subtiles::after { content: "\f0c9"; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; bottom: 20px; right: 20px; font-size: 20px; color: rgba(255,255,255,0.4); transition: all 0.2s ease; }
 .tile.has-subtiles:hover::after { color: rgba(255,255,255,0.7); transform: scale(1.1); }
 .tile-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.95; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); display: block; color: #fff !important; }

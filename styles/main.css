@@ -1,6 +1,6 @@
 * { box-sizing: border-box; }
 body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; background: #ffffff; min-height: 100vh; }
-.page-container { max-width: 1400px; margin: 0 auto; padding: 40px 24px 60px; }
+.page-container { max-width: 1400px; margin: 0 auto; padding: 100px 24px 60px; }
 .page-title { margin: 0 0 48px; font-size: 36px; font-weight: 700; color: #1e293b; text-align: center; letter-spacing: -0.5px; }
 .page-subtitle { text-align: center; color: #64748b; font-size: 16px; margin: -36px 0 48px; }
 .controls-bar { position: absolute; top: 40px; right: 24px; display: flex; gap: 12px; align-items: center; }
@@ -32,10 +32,11 @@ body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Sego
 .main-group-tile { border: none; cursor: pointer; border-radius: 16px; padding: 48px 24px; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); aspect-ratio: 1; position: relative; overflow: hidden; }
 .main-group-tile::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 100%); opacity: 0; transition: opacity 0.3s ease; }
 .main-group-tile:hover::before { opacity: 1; }
-.main-group-tile[data-group="BMJ"] { background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%); }
-.main-group-tile[data-group="AMJ"] { background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%); }
-.main-group-tile[data-group="Third Party"] { background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%); }
-.main-group-tile[data-group="Help Centre"] { background: linear-gradient(135deg, #64748b 0%, #475569 100%); }
+.main-group-tile[data-group="BMJ"] { background: linear-gradient(180deg, #e85e2c 20%, #135d3f 80%); }
+.main-group-tile[data-group="AMJ"] { background: linear-gradient(180deg, #b91820 20%, #000000 80%); }
+.main-group-tile[data-group="LTC"] { background: linear-gradient(180deg, #00a5aa 20%, #015457 80%); }
+.main-group-tile[data-group="Supply Chain"] { background: linear-gradient(180deg, #000000 20%, #44546a 80%); }
+.main-group-tile[data-group="Help Centre"] { background: #64748b; }
 .main-group-tile .main-group-icon { font-size: 56px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); color: #fff !important; }
 .main-group-tile .main-group-icon i { color: #fff !important; }
 .main-group-tile .main-group-label { font-size: 17px; font-weight: 600; text-align: center; letter-spacing: 0.3px; color: #fff; }
@@ -47,15 +48,15 @@ body { margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Sego
 .tile { border-radius: 16px; color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.08); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
 .tile::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%); opacity: 0; transition: opacity 0.3s ease; }
 .tile:hover::before { opacity: 1; }
-.tile.blue { background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); }
-.tile.light-blue { background: linear-gradient(135deg, #0e7490 0%, #0891b2 100%); }
-.tile.orange { background: linear-gradient(135deg, #c2410c 0%, #ea580c 100%); }
+.tile.light-blue { background: #058ccb; }
+.tile.blue { background: #002e5f; }
+.tile.orange { background: #e85e2c; }
 .tile:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.15); }
 .tile-content { padding: 28px 24px; min-height: 200px; display: flex; flex-direction: column; justify-content: space-between; }
 .tile-category-badge { position: absolute; top: 16px; right: 16px; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(10px); }
 .tile-category-badge.public { background: rgba(16,185,129,0.25); color: #6ee7b7; border: 1px solid rgba(16,185,129,0.3); }
 .tile-category-badge.private { background: rgba(99,102,241,0.25); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3); }
-.tile-category-badge.wip { background: rgba(245,158,11,0.25); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
+.tile-category-badge.work-in-progress { background: rgba(245,158,11,0.25); color: #fcd34d; border: 1px solid rgba(245,158,11,0.3); }
 .badge-icon { font-size: 10px; }
 .tile.has-subtiles::after { content: "\f0c9"; font-family: "Font Awesome 6 Free"; font-weight: 900; position: absolute; bottom: 20px; right: 20px; font-size: 20px; color: rgba(255,255,255,0.4); transition: all 0.2s ease; }
 .tile.has-subtiles:hover::after { color: rgba(255,255,255,0.7); transform: scale(1.1); }
