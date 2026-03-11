@@ -7,7 +7,7 @@ import sys
 import ast
 
 
-# Get API token from GitHub secrets (not .env)
+# Get API token from GitHub secrets (codespace secret)
 API_TOKEN = os.environ.get("MORTA_API_KEY")
 if not API_TOKEN:
     print("❌ ERROR: MORTA_API_TOKEN not set in GitHub secrets")
