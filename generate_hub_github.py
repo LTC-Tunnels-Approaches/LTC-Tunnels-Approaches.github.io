@@ -8,7 +8,7 @@ import ast
 
 
 # Get API token from GitHub secrets (not .env)
-API_TOKEN = '_-7pBs6kmgiyM_B9cspf6tOJVHmAlIwTZ1uBqj73kEc'
+API_TOKEN = os.environ.get("MORTA_API_KEY")
 if not API_TOKEN:
     print("❌ ERROR: MORTA_API_TOKEN not set in GitHub secrets")
     sys.exit(1)
